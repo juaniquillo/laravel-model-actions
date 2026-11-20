@@ -20,4 +20,12 @@ abstract class TestCase extends Orchestra
             LaravelModelActionsServiceProvider::class,
         ];
     }
+
+    /**
+     * Load the workbench migrations for tests that refresh the database.
+     */
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__.'/../workbench/database/migrations');
+    }
 }

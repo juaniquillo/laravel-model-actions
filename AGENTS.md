@@ -28,7 +28,7 @@ An opinionated Laravel package, kept small, idiomatic, and easy to install, test
 
 ## Testing
 
-- Feature tests extend `Tests\TestCase` (Orchestra Testbench) and use Pest's `it()` syntax.
+- Feature and unit tests extend `Tests\TestCase` (Orchestra Testbench) and use Pest's `it()` syntax.
 - Test observable behaviour through public APIs; avoid asserting implementation details.
 - `tests/ArchTest.php` bans `dd()`, `ddd()`, `env()` and `exit()`, and requires strict types.
 - Type coverage is gated at 100% — type every parameter, return value and property.
@@ -46,12 +46,17 @@ the `Workbench\` namespace and are never shipped.
 | `src/` | Package source |
 | `tests/` | Pest tests (Arch, Feature, Unit) |
 | `workbench/` | Testbench application |
-| `.agents/skills/`, `resources/boost/skills/` | AI skills: `laravel-best-practices` for Laravel code, `laravel-model-actions-development` for this repository |
+| `.agents/skills/` | AI skills: `laravel-best-practices` for Laravel code and `laravel-model-actions-development` for this repository |
+| `resources/boost/skills/` | Shipped copy of `laravel-model-actions-development`; keep it identical to `.agents/skills/` |
 | `bin/pest.php` | Cross-platform Pest runner |
 
 ## Adding a capability
 
-1. Add the class under `src/` (and its tests under `tests/Feature`).
-2. Expose it through the service provider only when it needs container bindings or publishing.
-3. Run `composer qa`.
-4. Update `README.md` usage and `CHANGELOG.md`.
+1. Add the action under `src/Actions` and its recipe under `src/Recipes` (a recipe sets
+   `$this->action` to its action class).
+2. Add unit tests for the action and the recipe, a case in `tests/Feature/CollectionExecutionTest`,
+   and a database-backed feature test when the action touches Eloquent.
+3. Expose it through the service provider only when it needs container bindings or publishing.
+4. Run `composer qa`.
+5. Update `README.md` usage and `CHANGELOG.md`; add a `composer.json` keyword when the feature is
+   user-facing.
